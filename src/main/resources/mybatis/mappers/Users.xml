@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sample.mapper.UserMapper">
+
+	<insert id="insertUser" parameterType="com.sample.vo.User">
+		INSERT INTO shop_users
+		(user_no, user_id, user_password, user_name, user_email, user_tel, user_birth)
+		VALUES
+		(users_seq.nextval, #{id}, #{password}, #{name}, #{email}, #{tel}, #{birth})
+	</insert>
+	
+	<update id="updateUser" parameterType="com.sample.vo.User">
+	
+		UPDATE 
+				shop_users
+		
+		SET
+				<if test="password != null">
+					user_password = #{password}, 
+				</if>
+				<if test="email != null">
+					user_email = #{email}, 
+				</if>
+				<if test="tel != null">
+					user_tel= #{tel}, 
+				</if>
+				<if test="deleted != null">
+					user_deleted= #{deleted}, 
+				</if>
+				user_updated_date = SYSDATE
+		
+		WHERE 
+				user_no = #{no}
+	
+	</update>
+	
+	
+	<select id="getUserById" parameterType="String" resultType="com.sample.vo.User">
+	
+		SELECT
+				user_no 			AS no,
+				user_id				AS id,
+				user_password		AS password,
+				user_name 			AS name,
+				user_tel 			AS tel,
+				user_email 			AS email,
+				user_deleted		AS deleted,
+				user_birth			AS birth,
+				user_updated_date	AS updatedDate,
+				user_created_date	AS createdDate
+		
+		FROM
+				shop_users
+		
+		WHERE
+				user_id = #{value}
+				
+	</select>
+
+	<select id="getUserByEmail"  parameterType="String" resultType="com.sample.vo.User">
+		
+			SELECT
+					user_no 			AS no,
+					user_id				AS id,
+					user_password		AS password,
+					user_name 			AS name,
+					user_tel 			AS tel,
+					user_email 			AS email,
+					user_deleted		AS deleted,
+					user_birth			AS birth,
+					user_updated_date	AS updatedDate,
+					user_created_date	AS createdDate
+		
+			FROM
+					shop_users
+			
+			WHERE
+					user_email = #{value}
+			
+	</select>
+
+	<select id="getUserByNo"  parameterType="int" resultType="com.sample.vo.User">
+		
+		SELECT
+				user_no 			AS no,
+				user_id				AS id,
+				user_password		AS password,
+				user_name 			AS name,
+				user_tel 			AS tel,
+				user_email 			AS email,
+				user_deleted		AS deleted,
+				user_birth			AS birth,
+				user_updated_date	AS updatedDate,
+				user_created_date	AS createdDate
+		
+		FROM
+				shop_users
+		
+		WHERE
+				user_no = #{value}
+		
+	</select>
+
+</mapper>
