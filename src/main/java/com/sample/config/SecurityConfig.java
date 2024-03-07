@@ -65,11 +65,12 @@ public class SecurityConfig {
 		http
 			// 로그인 설정
 			.formLogin((formLogin) -> formLogin
-					.loginPage("/login")				// 로그인 폼 페이지를 요청하는 URL은 "/login" 이다.
+					.loginPage("/login")				// 로그인 폼 페이지를 요청하는 URL은 "/login"이다.
+					.loginProcessingUrl("/login")		// 로그인 처리를 요청한 URL은 "/login"이다.
 					.defaultSuccessUrl("/")				// 로그인이 성공하면 "/"를 재요청 URL로 지정한다.
 					.usernameParameter("id")			// 로그인폼에서 아이디값은 "id"라는 파라미터 이름으로 전달될 것이다.
 					.passwordParameter("password")		// 로그인폼에서 비밀번호값은 "password"라는 파라미터 이름으로 전달될 것이다.
-					.failureUrl("/login/error"));		// 로그인에 실패하면 "/login/error"를 재요청 URL로 지정한다.
+					.failureUrl("/login?error=fail"));	// 로그인에 실패하면 "/login/error"를 재요청 URL로 지정한다.
 		
 		http
 			// 로그아웃 설정
