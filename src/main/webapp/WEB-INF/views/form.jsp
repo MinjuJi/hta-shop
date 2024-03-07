@@ -78,7 +78,7 @@
 				</div>
 				<div class="form-group mb-3">
 					<label class="form-label">생일</label>
-					<form:input class="form-control" path="birth" />
+					<form:input type="date" class="form-control" path="birth" />
 					<form:errors path="birth" cssClass="text-danger"></form:errors>
 				</div>
 				<div class="text-end">
