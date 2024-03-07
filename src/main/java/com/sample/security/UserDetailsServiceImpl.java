@@ -27,7 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throw new UsernameNotFoundException(username);
 		}
 		
-		return new UserDetailsImpl(user.getId(), user.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
+		return new UserDetailsImpl(user.getId(), user.getPassword(), user.getName(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
 	}
 	
 }

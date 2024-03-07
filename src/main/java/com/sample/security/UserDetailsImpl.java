@@ -11,12 +11,18 @@ public class UserDetailsImpl implements UserDetails {
 	
 	private String username;
 	private String password;
+	private String name;
 	private Collection<? extends GrantedAuthority> authorities;
 	
-	public UserDetailsImpl(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+	public UserDetailsImpl(String username, String password, String name, Collection<? extends GrantedAuthority> authorities) {
 		this.username = username;
 		this.password = password;
+		this.name = name;
 		this.authorities = authorities;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	@Override
