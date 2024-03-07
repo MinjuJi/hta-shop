@@ -25,6 +25,9 @@
 					<strong><sec:authentication property="principal.name"/></strong>님 환영합니다.
 				</span>
 				<li class="nav-item">
+					<a class="nav-link" href="/user/me">내 정보</a>
+				</li>
+				<li>
 					<a class="nav-link" href="/logout" onclick="logout(event)">로그아웃</a>
 				</li>
 			</sec:authorize>
@@ -37,7 +40,7 @@
 	스프링 시큐리티에서 POST 요청을 보낼 때는 CSRF토큰을 같이 보내야 한다.
 	따라서, 로그아웃 링크를 클릭하면, POST 방식으로 폼이 제출되게 해야 한다.
  --%>
-<form id="form-logout" method="post" action="logout"><sec:csrfInput/></form>
+<form id="form-logout" method="post" action="/logout"><sec:csrfInput/></form>
 <script>
 	function logout(event){
 		event.preventDefault();

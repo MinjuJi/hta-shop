@@ -2,6 +2,7 @@ package com.sample.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -51,17 +52,27 @@ import org.springframework.security.web.SecurityFilterChain;
  */
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig {
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+/*
 		http
-			// 리소스에 대한 접근권한을 설정한다.
+			// 요청 URL 별로 리소스에 대한 접근권한을 설정한다.
 			.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
 	               .antMatchers("/resources/**").permitAll()				// "/resources" 및 하위 경로에 대해서 접근을 허용 
 	               .antMatchers("/", "/login", "/register").permitAll()		// "/", "/login", "/register"에 대해서 접근을 허용
 	               .anyRequest().authenticated()); 							// 위에서 제시한 경로 외의 모든 경로에 대해서는 인증이 요구된다.
-
+*/
+		
+		http
+			// 모든 요청 URL에 대해서 접근을 허용하도록 설정한다.
+			// 단, 인증이 필요하거나, 권한이 필요한 경우 Controller 클래스의 요청 핸들러 메소드에서 접근제어를 설정한다.
+			.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
+					.antMatchers("/**").permitAll());
+				
+				
 		http
 			// 로그인 설정
 			.formLogin((formLogin) -> formLogin

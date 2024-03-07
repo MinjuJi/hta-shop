@@ -14,7 +14,6 @@ import com.sample.web.form.UserRegisterForm;
 
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 
 @Controller
 /*
@@ -28,7 +27,6 @@ import lombok.extern.log4j.Log4j2;
  * 			log.error(메시지);
  * 		- System.out.prinln() 대신 반드시 log를 사용하자.
  */
-@Log4j2
 @RequiredArgsConstructor
 public class HomeController {
 	
@@ -67,8 +65,6 @@ public class HomeController {
 		}
 		
 		return "redirect:/";
-		
-		
 	}
 	
 	/*

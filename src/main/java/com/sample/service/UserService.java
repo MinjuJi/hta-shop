@@ -31,6 +31,10 @@ public class UserService {
 		}
 		
 	*/
+	
+	public User getUser(String id) {
+		return userMapper.getUserById(id);
+	}
 
 	public void registerUser(UserRegisterForm form) {
 		User foundUser = userMapper.getUserById(form.getId());
