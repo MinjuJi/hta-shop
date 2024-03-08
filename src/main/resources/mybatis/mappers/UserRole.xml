@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sample.mapper.UserRoleMapper">
+
+	<insert id="insertUserRole" parameterType="com.sample.vo.UserRole">
+		
+		INSERT INTO shop_user_roles
+		(user_no, user_rolename)
+		VALUES
+		(#{userNo}, #{rolename})
+		
+	</insert>
+
+
+	<delete id="deleteUserRole" parameterType="com.sample.vo.UserRole">
+		
+		DELETE FROM
+				shop_user_roles
+				
+		WHERE
+				user_no = #{userNo}
+		AND		user_rolename = #{rolename}
+		
+	</delete>
+	
+	
+	<select id="getUserRolesByUserNo" parameterType="int" resultType="com.sample.vo.UserRole">
+		
+		SELECT
+				user_no AS userNo,
+				user_rolename AS rolename
+				
+		FROM
+				shop_user_roles
+		
+		WHERE
+				user_no = #{value}
+	
+	</select>
+</mapper>

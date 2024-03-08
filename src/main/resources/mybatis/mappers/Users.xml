@@ -3,10 +3,23 @@
 <mapper namespace="com.sample.mapper.UserMapper">
 
 	<insert id="insertUser" parameterType="com.sample.vo.User">
+	
+		<!-- 
+			사용자 권한 부여를 위해 시퀀스 미리 생성하여 User 클래스의 no 멤버변수에 저장
+			덕분에 User 클래스의 no를 조회하는 mapper를 안 만들어도 됨
+		-->
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			SELECT
+					users_seq.nextval
+			FROM
+					dual
+		</selectKey>
+	
 		INSERT INTO shop_users
 		(user_no, user_id, user_password, user_name, user_email, user_tel, user_birth)
 		VALUES
-		(users_seq.nextval, #{id}, #{password}, #{name}, #{email}, #{tel}, #{birth})
+		(#{no}, #{id}, #{password}, #{name}, #{email}, #{tel}, #{birth})
+		
 	</insert>
 	
 	<update id="updateUser" parameterType="com.sample.vo.User">
