@@ -12,7 +12,7 @@
 </head>
 <body>
 <%@ include file="../common/navbar.jsp" %>
-<div class="contatiner">
+<div class="container">
 	<div class="row nb-3">
 		<div class="col-12">
 			<h1>상품 상세 정보</h1>
@@ -57,6 +57,10 @@
 					</tr>
 				</tbody>
 			</table>
+			<div class="text-end">
+				<a href="/order/step1?no=${product.no }" class="btn btn-primary">바로구매</a>
+				<a href="/cart/add?no=${product.no }" class="btn btn-secondary">장바구니</a>
+			</div>
 		</div>
 	</div>
 </div>
