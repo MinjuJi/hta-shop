@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sample.mapper.ProductMapper">
+	
+	<resultMap type="com.sample.vo.Product" id="ProductResultMap">
+		<id column="product_no" property="no"/>
+		<result column="product_name" property="name"/>
+		<result column="product_description" property="description"/>
+		<result column="product_stock" property="stock"/>
+		<result column="product_status" property="status"/>
+		<result column="product_price" property="price"/>
+		<result column="product_filename" property="filename"/>
+		<result column="product_updatedDate" property="updatedDate"/>
+		<result column="product_createdDate" property="createdDate"/>
+		
+		<!-- 
+			<association/>은 mapper 폴더 내의 다른 SQL문을 활용할 때 사용하는 태그 
+				- 복잡한 타입의 연관관계를 나타낸다.
+				- "has-one" 타입의 관계를 나타낸다.
+			
+			<collection /> 
+				- 복잡한 타입의 컬렉션 연관관계를 나타낸다.
+				- "has-many" 타입의 관계를 나타낸다.
+				
+			class Product{
+			
+			int no;	
+			String name;
+			int price;
+			Company company;			- 복잡한 타입의 연관관계
+			ProductCategory category;	- 복잡한 타입의 연관관계
+			List<Review> reviews;		- 복잡한 타입의 컬렉션 연관관계
+			
+			}
+		-->
+		<association column="company_no" 
+					 property="company" 
+					 select="com.sample.mapper.CompanyMapper.getCompanyByNo"/>
+					 
+		<association column="product_category_no" 
+ 					 property="category" 
+					 select="com.sample.mapper.ProductCategoryMapper.getProductCategoryByNo" />
+	</resultMap>
+	
+	
+	<select id="getProductsByCategoryNo" parameterType="int" resultType="com.sample.vo.Product">
+		SELECT
+				P.product_no 			AS no,
+				P.product_name 			AS name,
+				P.product_price 		AS price,
+				P.product_no 			AS "company.no",
+				C.company_name 			AS "company.name",
+				P.product_status		AS status
+				
+		FROM
+				shop_products P, shop_companies C
+				
+		WHERE
+				P.product_category_no = #{value}
+		AND		P.company_no = C.company_no
+		
+		ORDER BY
+				P.product_no DESC
+	</select>
+	
+	
+	<select id="getProductByNo" parameterType="int" resultMap="ProductResultMap">
+	
+	
+		SELECT
+				*
+		FROM
+				shop_products
+		WHERE 	
+				product_no = #{value}
+	</select>
+</mapper>
