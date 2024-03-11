@@ -19,16 +19,7 @@
 	</div>
 	<div class="row mb-3">
 		<div class="col-3">
-			<div class="card">
-				<div class="card-header">상품 카테고리</div>
-				<div class="list-group list-group-flush">
-					<c:forEach var="category" items="${productCategories}">
-						<a href="/product/list?catNo=${category.no }" class="list-group-item list-group-item-action">
-							${category.name }
-						</a>
-					</c:forEach>
-				</div>
-			</div>
+			<%@ include file="../common/category.jsp" %>
 		</div>
 		<div class="col-9">
 			<table class="table">
@@ -63,7 +54,7 @@
 									items		- 반복처리 대상이 되는 컬렉션, 배열 객체를 컨트롤러에서 모델에 저장할 때 사용했던 이름을 지정하면, 그 이름으로 저장된 컬렉션, 배열객체를 조회한다.
 									varStatus	- forEach 태그로 반복작업을 수행할 때 매 반복시마다 현재 반복작업의 상태정보가 저장되는 객체가 있는데 그 객체가 대입되는 변수명이다.
 												- 해당 객체의 주요 프로퍼티
-													index: 현재 반복처리중인 아이템이 컬렉션이나 배열제 저장된 index를 출력한다.(0부터 시작하는 값)
+													index: 현재 반복처리중인 아이템이 컬렉션이나 배열제 저장된 index를 출력한다.(0부터 시작)
 													count: 현재 반복처리중인 작업이 몇번째 반복작업인지를 출력한다.(1부터 시작)
 													first: 현재 반복처리중인 작업이 첫번째 작업인 경우 true를 출력한다.
 													last: 현재 반복처리중인 작업이 마지막먼째 작업인 경우 true를 출력한다.

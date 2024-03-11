@@ -10,8 +10,8 @@
 		<result column="product_status" property="status"/>
 		<result column="product_price" property="price"/>
 		<result column="product_filename" property="filename"/>
-		<result column="product_updatedDate" property="updatedDate"/>
-		<result column="product_createdDate" property="createdDate"/>
+		<result column="product_updated_date" property="updatedDate"/>
+		<result column="product_created_date" property="createdDate"/>
 		
 		<!-- 
 			<association/>은 mapper 폴더 내의 다른 SQL문을 활용할 때 사용하는 태그 

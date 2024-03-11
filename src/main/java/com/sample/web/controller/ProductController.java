@@ -45,6 +45,6 @@ public class ProductController {
 		Product product = productService.getProduct(productNo);
 		model.addAttribute("product", product);
 		
-		return "product/detatil";
+		return "product/detail";
 	}
 }
