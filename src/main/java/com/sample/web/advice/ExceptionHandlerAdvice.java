@@ -25,8 +25,8 @@ public class ExceptionHandlerAdvice {
 		return "error/db";
 	}
 	
-	@ExceptionHandler(Exception.class)
-	public String exceptionHandle(Exception e) {
-		return "error/sever";
-	}
+//	@ExceptionHandler(Exception.class)
+//	public String exceptionHandle(Exception e) {
+//		return "error/sever";
+//	}
 }

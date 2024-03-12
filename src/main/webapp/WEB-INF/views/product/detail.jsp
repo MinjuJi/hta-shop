@@ -55,6 +55,10 @@
 						<th>등록일자</th>
 						<td><fmt:formatDate value="${product.createdDate }" pattern="yyyy-MM-dd" /></td>
 					</tr>
+					<tr>
+						<th>설명</th>
+						<td colspan=3>${product.description }</td>
+					</tr>
 				</tbody>
 			</table>
 			<div class="text-end">
