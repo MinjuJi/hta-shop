@@ -113,5 +113,30 @@
 				user_no = #{value}
 		
 	</select>
-
+	
+	<select id="getAllUsers" resultType="com.sample.vo.User">
+		
+		SELECT
+				user_no 			AS no,
+				user_id				AS id,
+				user_password		AS password,
+				user_name 			AS name,
+				user_tel 			AS tel,
+				user_email 			AS email,
+				user_deleted		AS deleted,
+				user_birth			AS birth,
+				user_updated_date	AS updatedDate,
+				user_created_date	AS createdDate
+				
+		FROM
+				shop_users
+		
+		ORDER BY
+				user_id ASC
+				
+	</select>
+		
 </mapper>
+
+
+
