@@ -1,6 +1,7 @@
 package com.sample.web.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -8,8 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.sample.service.OrderService;
 import com.sample.service.UserService;
 import com.sample.vo.User;
+import com.sample.web.dto.OrderListDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
 
+	private final OrderService orderService;
 	private final UserService userService;
 	
 	/*
@@ -47,4 +51,13 @@ public class UserController {
 		return "user/info";
 	}
 	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/orders")
+	public String orders(Principal principal, Model model) {
+		String userId = principal.getName();
+		List<OrderListDto> dtos = orderService.getMyOrders(userId);
+		model.addAttribute("dtos", dtos);
+		
+		return "user/orders";
+	}
 }

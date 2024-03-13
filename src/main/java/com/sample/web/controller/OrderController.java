@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -186,4 +187,22 @@ public class OrderController {
 		return "order/completed";
 	}
 	
+	/*
+	 * 요청 방식
+	 * 			GET
+	 * 요청 URL
+	 * 			localhost/order/detail/100002
+	 * 요청 파라미터
+	 * 			없음
+	 * 			대신, 요청 경로에 주문번호가 포함되어 있다.
+	 * 
+	 */
+	@GetMapping("/detail/{orderNo}")
+	public String detail(@PathVariable("orderNo") int orderNo, Principal principal, Model model) {
+		String userId = principal.getName();
+		OrderDetailDto dto = orderService.getOrderDetail(orderNo, userId);
+		model.addAttribute("dto", dto);
+		
+		return "order/detail";
+	}
 }
