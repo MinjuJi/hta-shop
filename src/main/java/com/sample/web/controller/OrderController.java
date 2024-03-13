@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sample.service.OrderService;
 import com.sample.service.ProductService;
@@ -123,10 +125,54 @@ public class OrderController {
 	 * 			5. 주문정보를 확인할 수 있는 URL을 재요청 URL로 보낸다. 
 	 */
 	@PostMapping("/step3")
-	public String step3(@ModelAttribute("orderForm") OrderForm orderForm, Principal principal) {
+	public String step3(@ModelAttribute("orderForm") OrderForm orderForm, Principal principal, SessionStatus sessionStatus, RedirectAttributes redirectAttributes) {
 		// 주문관련 업무로직 메소드를 실행한다.
 		String userId = principal.getName();
 		Order order = orderService.saveOrder(orderForm, userId);
+		
+		/*
+		 * SessionStatus
+		 * - HttpSession에 속성으로 추가된 객체를 삭제하는 기능을 제공한다.
+		 * - @SessionAttributes 어노테이션으로 HttpSession에 저장된 데이터를 삭제한다.
+		 */
+		sessionStatus.setComplete();
+		
+		/*
+		 * RedirectAttributes
+		 * - 요청핸들러 메소드 실행 후 리다이렉트 방식으로 재요청하게 되는 다음 요청핸들러 메소드에 전달할 정보를 저장할 수 있는 객체다.
+		 * - 요청핸들러 메소드에서 저장/변경/삭제 작업을 수행한 후에는 재요청 URL을 응답으로 보내게 되는 이 경우 응답이 완료됨과 동시 요청객체와 응답객체가 사라지기 때문에 Model에 데이터를 담아놓으면 전부 사라진다.
+		 * - 일반적으로 재요청 URL을 응답으로 보내는 요청핸들러 메소드에서는 뷰에 데이터를 전달할 방법이 없다.
+		 * - 주요 메소드
+		 * 	1. addAttribute(String name, Object value)
+		 * 		- 요청핸들러 메소드가 반환하는 재요청 URL에 쿼리스트림으로 추가될 값을 저장한다.
+		 * 		- ex) public String sample(Form form, RedirectAttributes redirectAttributes) {
+		 * 					redirectAttributes.addAttribute("page", 1)
+		 * 					redirectAttributes.addAttribute("sort", "date")
+		 * 					redirectAttributes.addAttribute("rows", 10)
+		 * 
+		 * 					return "redirect:list";
+		 *			  } 
+		 *			  * 재요청 URL : list?page=1&sort=date&rows=10 
+		 *
+		 *			  public String sample(Form form, RedirectAttributes redirectAttributes) {
+		 * 					redirectAttributes.addAttribute("page", 1)
+		 * 					redirectAttributes.addAttribute("sort", "date")
+		 * 					redirectAttributes.addAttribute("rows", 10)
+		 * 
+		 * 					return "redirect:list/{page}";
+		 *			  } 
+		 *			  * 재요청 URL : list/1?sort=date&rows=10 
+		 *			  * {속성명} 표현식은 해당 위치에 RedirectAttributes에 추가한 속성값이 표시되고, 나머지는 쿼리스트림 형태로 추가된다.
+		 * 			
+		 * 
+		 * 	2. addFlashAttribute(String name, Object value)
+		 * 		- 이 메소드로 추가된 정보는 재요청 URL로 새로 요청한 요청핸들러 메소드의 뷰에 값을 전달할 수 있다.
+		 * 		- 이 메소드로 추가된 정보는 일시적으로 HttpSession 객체에 속성으로 저장된다. (일회성)
+		 * 		- 재요청 URL로 새로 요청한 요청핸들러 메소드의 Model로 값이 추가되고, 세션에서는 삭제된다.
+		 * 
+		 */
+		redirectAttributes.addAttribute("orderNo", order.getNo());
+		// redirectAttributes.addFlashAttribute("order", attributeValue)
 		
 		return "redirect:completed?orderNo=" + order.getNo();
 	}

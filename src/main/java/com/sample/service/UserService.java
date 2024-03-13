@@ -52,7 +52,7 @@ public class UserService {
 	 * 		7. 신규 회원의 권한 정보가 저장된 UserRole 객체를 mybatis에 전달해서 데이터베이스에 저장시킨다.
 	 * 		
 	 */
-	public void registerUser(UserRegisterForm form) {
+	public User registerUser(UserRegisterForm form) {
 		User foundUser = userMapper.getUserById(form.getId());
 		
 		if(foundUser != null) {
@@ -76,6 +76,8 @@ public class UserService {
 			userRole.setRolename("ROLE_USER");
 			
 			userRoleMapper.insertUserRole(userRole);
+			
+			return user;
 	}
 }
 

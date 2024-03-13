@@ -6,10 +6,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sample.exception.AlreadyUsedEmailException;
 import com.sample.exception.AlreadyUsedIdException;
 import com.sample.service.UserService;
+import com.sample.vo.User;
 import com.sample.web.form.UserRegisterForm;
 
 import javax.validation.Valid;
@@ -44,7 +46,7 @@ public class HomeController {
 	}
 	
 	@PostMapping("/register")
-	public String register(@Valid UserRegisterForm form, BindingResult errors) {
+	public String register(@Valid UserRegisterForm form, BindingResult errors, RedirectAttributes redirectAttributes) {
 		
 		// 폼 입력값 유효성 체크를 통과하지 못한 경우, 회원가입화면으로 내부이동시킨다.
 		if(errors.hasErrors()) {
@@ -53,7 +55,9 @@ public class HomeController {
 		
 		try {
 			// 폼 입력값 유효성 체크를 통과한 경우
-			userService.registerUser(form);
+			User user = userService.registerUser(form);
+			redirectAttributes.addFlashAttribute("user", user);
+			
 		} catch(AlreadyUsedIdException e) {
 			// rejectValue(필드명, 에러코드, 에러메시지) 메소드는 BindginfResult 객체에 FieldError를 추가한다.
 			errors.rejectValue("id", null, e.getMessage());
@@ -64,7 +68,12 @@ public class HomeController {
 			return "form";
 		}
 		
-		return "redirect:/";
+		return "redirect:/completed";
+	}
+	
+	@GetMapping("/completed")
+	public String completed() {
+		return "completed";
 	}
 	
 	/*
