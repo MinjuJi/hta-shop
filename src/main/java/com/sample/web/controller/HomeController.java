@@ -6,13 +6,17 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sample.exception.AlreadyUsedEmailException;
 import com.sample.exception.AlreadyUsedIdException;
 import com.sample.service.UserService;
+import com.sample.vo.Company;
 import com.sample.vo.User;
 import com.sample.web.form.UserRegisterForm;
+
+import java.util.List;
 
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
