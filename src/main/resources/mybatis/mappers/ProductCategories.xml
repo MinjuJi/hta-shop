@@ -24,6 +24,9 @@
 		FROM
 				shop_product_categories
 		
+		WHERE
+				parent_category_no IS NULL
+		
 		ORDER BY
 				category_no	ASC
 				
@@ -41,6 +44,23 @@
 		
 		WHERE
 				category_no = #{value}
+				
+	</select>
+	
+	<select id="getProductCategoriesByParentCategoryNo" parameterType="int" resultType="com.sample.vo.ProductCategory">
+	
+		SELECT 
+				category_no		AS no,
+				category_name	AS name
+				
+		FROM
+				shop_product_categories
+		
+		WHERE
+				parent_category_no = #{value}
+		
+		ORDER BY
+				category_no	ASC
 				
 	</select>
 	

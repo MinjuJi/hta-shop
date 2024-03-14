@@ -56,7 +56,9 @@
 				shop_products P, shop_companies C
 				
 		WHERE
-				P.product_category_no = #{value}
+				P.product_category_no in(SELECT category_no
+										 FROM shop_product_categories
+										 WHERE parent_category_no = #{value})
 		AND		P.company_no = C.company_no
 		
 		ORDER BY

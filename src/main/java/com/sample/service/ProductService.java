@@ -19,11 +19,20 @@ public class ProductService {
 	private final ProductCategoryMapper productCategoryMapper;
 	
 	/**
-	 * 모든 상품 카테고리 정보를 반환한다.
-	 * @return 상품 카테고리 목록
+	 * 상위 카테고리 정보를 반환한다.
+	 * @return 상위 카테고리 목록
 	 */
 	public List<ProductCategory> getAllProductCategories(){
 		return productCategoryMapper.getProductCategories();
+	}
+	
+	/**
+	 * 지정된 카테고리의 하위 카테고리 정보를 반환한다.
+	 * @param categoryNo 상위 카테고리 번호
+	 * @return 하위 카테고리 목록
+	 */
+	public List<ProductCategory> getAllSubProductCategories(int categoryNo){
+		return productCategoryMapper.getProductCategoriesByParentCategoryNo(categoryNo);
 	}
 	
 	/**
