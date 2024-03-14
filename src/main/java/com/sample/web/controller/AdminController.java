@@ -93,4 +93,10 @@ public class AdminController {
 	public List<ProductCategory> categories(@RequestParam("catNo") int catNo){
 		return productService.getAllSubProductCategories(catNo);
 	}
+	
+	@GetMapping("/products/{productNo}")
+	@ResponseBody
+	public Product product(@PathVariable("productNo") int productNo) {
+		return productService.getProduct(productNo);
+	}
 }

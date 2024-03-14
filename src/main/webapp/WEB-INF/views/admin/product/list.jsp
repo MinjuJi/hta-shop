@@ -69,5 +69,87 @@
 		</div>
 	</div>
 </div>
+
+<!-- 부트스트랩 팝업 -->
+<div class="modal" tabindex="-1" id="modal-product-info">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">사용자 상세정보</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<table class="table">
+					<tbody>
+						<tr>
+							<th>번호</th>
+							<td><span id="product-no"></span></td>
+							<th>이름</th>
+							<td><span id="product-name"></span></td>
+						</tr>
+						<tr>
+							<th>가격</th>
+							<td><span id="product-price"></span></td>
+							<th>제조회사</th>
+							<td><span id="company-name"></span></td>
+						</tr>
+						<tr>
+							<th>설명</th>
+							<td colspan="3"><span id="product-description"></span></td>
+						</tr>
+						<tr>
+							<th>재고</th>
+							<td><span id="product-stock"></span></td>
+							<th>상태</th>
+							<td><span id="product-status"></span></td>
+						</tr>
+						<tr>
+							<th>분류</th>
+							<td><span id="product-category"></span></td>
+							<th>등록일</th>
+							<td><span id="product-created-date"></span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	// 부트스트랩 모달(팝업창) 객체를 생성한다.
+	const myModal = new bootstrap.Modal(document.getElementById('modal-product-info'));
+	
+	function showProductInfo(no) {
+		
+		let xhr = new XMLHttpRequest();							// 1. 서버와 HTTP 통신을 하는 XMLHttpRequest 객체를 생성한다.
+		xhr.onreadystatechange = function() {					// 2. xhr객체의 readyState값이 변경될 때 마다 실행되는 이벤트핸들러 함수를 등록한다.
+			
+			if (xhr.readyState == 4 && xhr.status == 200) {		// 5. readyState=4:응답이 왔다. status=200:성공 
+				let text = xhr.responseText;					// 6. xhr의 responseText  프로퍼티에서 텍스트응답데이터를 조회한다.
+				let product = JSON.parse(text);					// 7. product = {no:1001, name:"TV", price:10000, ...}
+				console.log(product)
+				
+				document.getElementById("product-no").textContent = product.no;
+				document.getElementById("product-name").textContent = product.name;
+				document.getElementById("product-price").textContent = product.price.toLocaleString();	// toLocaleString(): 회계형식으로 표현
+				document.getElementById("company-name").textContent = product.company.name;
+				document.getElementById("product-description").textContent = product.description;
+				document.getElementById("product-stock").textContent = product.stock;
+				document.getElementById("product-status").textContent = product.status;
+				document.getElementById("product-category").textContent = product.category.name;
+				document.getElementById("product-created-date").textContent = product.createdDate;
+				
+				myModal.show();
+			}
+		}
+		
+		xhr.open("GET", "/admin/products/" + no);				// 3. xhr객체를 초기화한다. 요청방식, 요청URL을 지정한다.
+		xhr.send(null);											// 4. 서버로 요청을 보낸다.
+		
+	}
+</script>
 </body>
 </html>
