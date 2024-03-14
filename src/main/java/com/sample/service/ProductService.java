@@ -66,4 +66,8 @@ public class ProductService {
 		productMapper.insertProduct(product);
 	}
 	
+	public List<Product> getAllProducts(){
+		return productMapper.getAllProducts();
+	}
+	
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sample.service.ProductService;
 import com.sample.service.UserService;
+import com.sample.vo.Product;
 import com.sample.vo.ProductCategory;
 import com.sample.vo.User;
 import com.sample.web.dto.UserDto;
@@ -38,7 +39,10 @@ public class AdminController {
 	
 	// 상품관리에서 상품 목록화면 요청을 처리하는 요청핸들러 메소드
 	@GetMapping("/product/list")
-	public String products() {
+	public String products(Model model) {
+		List<Product> products = productService.getAllProducts();
+		model.addAttribute("products", products);
+		
 		return "admin/product/list";
 	}
 	

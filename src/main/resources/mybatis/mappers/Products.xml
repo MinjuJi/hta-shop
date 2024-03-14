@@ -66,8 +66,19 @@
 	</select>
 	
 	
-	<select id="getProductByNo" parameterType="int" resultMap="ProductResultMap">
+	<select id="getAllProducts" resultMap="ProductResultMap">
 	
+		SELECT
+				*
+		FROM
+				shop_products
+		ORDER BY
+				product_no DESC
+	
+	</select>
+	
+	
+	<select id="getProductByNo" parameterType="int" resultMap="ProductResultMap">
 	
 		SELECT
 				*
@@ -75,7 +86,9 @@
 				shop_products
 		WHERE 	
 				product_no = #{value}
+				
 	</select>
+	
 	
 	<insert id="insertProduct" parameterType="com.sample.vo.Product">
 		

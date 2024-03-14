@@ -38,9 +38,9 @@
 				<colgroup>
 					<col width="10%">
 					<col width="15%">
-					<col width="45%">
+					<col width="35%">
 					<col width="10%">
-					<col width="10%">
+					<col width="20%">
 					<col width="10%">
 				</colgroup>
 				<thead>
@@ -53,7 +53,18 @@
 						<th></th>
 					</tr>
 				</thead>
-				<tbody></tbody>
+				<tbody>
+					<c:forEach var="product" items="${products }" varStatus="status">
+						<tr>
+							<td>${status.count }</td>
+							<td>${product.category.name }</td>
+							<td>${product.name }</td>
+							<td>${product.company.no }</td>
+							<td><fmt:formatNumber value="${product.price }"/> 원</td>
+							<td><button class="btn btn-outline-primary btn-sm" onclick="showProductInfo(${product.no})">상세보기</button></td>
+						</tr>
+					</c:forEach>
+				</tbody>
 			</table>
 		</div>
 	</div>
