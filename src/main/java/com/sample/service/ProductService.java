@@ -4,10 +4,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.sample.mapper.CompanyMapper;
 import com.sample.mapper.ProductCategoryMapper;
 import com.sample.mapper.ProductMapper;
+import com.sample.vo.Company;
 import com.sample.vo.Product;
 import com.sample.vo.ProductCategory;
+import com.sample.web.form.ProductForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductService {
 
+	private final CompanyMapper companyMapper;
 	private final ProductMapper productMapper; 
 	private final ProductCategoryMapper productCategoryMapper;
 	
@@ -51,6 +55,15 @@ public class ProductService {
 	 */
 	public Product getProduct(int productNo) {
 		return productMapper.getProductByNo(productNo);
+	}
+
+	public List<Company> getAllCompanies() {
+		return companyMapper.getCompanies();
+	}
+
+	public void createProduct(ProductForm productForm) {
+		Product product = productForm.toProduct();
+		productMapper.insertProduct(product);
 	}
 	
 }

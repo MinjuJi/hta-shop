@@ -76,4 +76,14 @@
 		WHERE 	
 				product_no = #{value}
 	</select>
+	
+	<insert id="insertProduct" parameterType="com.sample.vo.Product">
+		
+		INSERT INTO shop_products
+		(product_no, product_name, product_description, product_price, product_stock, company_no, product_category_no)
+		
+		VALUES
+		(products_seq.nextval, #{name}, #{description}, #{price}, #{stock}, #{company.no}, #{category.no})
+	
+	</insert>
 </mapper>

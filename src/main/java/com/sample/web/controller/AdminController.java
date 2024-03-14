@@ -10,11 +10,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sample.service.ProductService;
 import com.sample.service.UserService;
+import com.sample.vo.ProductCategory;
 import com.sample.vo.User;
 import com.sample.web.dto.UserDto;
+import com.sample.web.form.ProductForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class AdminController {
 	
 	private final UserService userService;
+	private final ProductService productService;
 	
 	@GetMapping("/home")
 	public String home() {
@@ -45,7 +50,8 @@ public class AdminController {
 	
 	// 상품관리에서 상품 등록 요청을 처리하는 요청핸들러 메소드
 	@PostMapping("/product/create")
-	public String createProduct() {
+	public String createProduct(ProductForm productForm) {
+		productService.createProduct(productForm);
 		return "redirect:/admin/product/list";
 	}
 	
@@ -57,6 +63,17 @@ public class AdminController {
 		return "admin/user/list";
 	}
 	
+	/*
+	 * 요청 방식
+	 * 			GET
+	 * 요청 URL
+	 * 			http://localhost/admin/user/hong
+	 * 요청 내용
+	 * 			요청 URL에 포함된 사용자 아이디에 해당하는 사용자 정보를 요청한다.
+	 * 처리 내용
+	 * 			요청 URL에 포함된 사용자 아이디를 @PathVariable 어노테이션을 이용해서 요청핸들러 메소드의 매개변수에 바인딩시키고,
+	 * 			해당 아이디로 사용자를 조회한 다음 UserDto 객체를 생성해서 옮겨 담고, 직렬화시켜서 응답으로 보낸다.
+	 */
 	@GetMapping("/users/{userId}")
 	@ResponseBody
 	public UserDto user(@PathVariable("userId") String userId) {
@@ -65,5 +82,11 @@ public class AdminController {
 		
 		BeanUtils.copyProperties(user, dto);
 		return dto;
+	}
+	
+	@GetMapping("/category")
+	@ResponseBody
+	public List<ProductCategory> categories(@RequestParam("catNo") int catNo){
+		return productService.getAllSubProductCategories(catNo);
 	}
 }

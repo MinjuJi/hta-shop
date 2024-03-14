@@ -16,4 +16,7 @@ public class Company {
 	private String address1;
 	private String address2;
 	
+	public Company(int no) {
+		this.no = no;
+	}
 }
