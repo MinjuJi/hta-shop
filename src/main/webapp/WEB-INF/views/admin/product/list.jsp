@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../../common/tags.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -38,10 +37,10 @@
 				<colgroup>
 					<col width="10%">
 					<col width="15%">
-					<col width="35%">
-					<col width="10%">
-					<col width="20%">
-					<col width="10%">
+					<col width="30%">
+					<col width="15%">
+					<col width="15%">
+					<col width="15%">
 				</colgroup>
 				<thead>
 					<tr>
@@ -57,11 +56,14 @@
 					<c:forEach var="product" items="${products }" varStatus="status">
 						<tr>
 							<td>${status.count }</td>
-							<td>${product.category.name }</td>
-							<td>${product.name }</td>
-							<td>${product.company.no }</td>
-							<td><fmt:formatNumber value="${product.price }"/> 원</td>
-							<td><button class="btn btn-outline-primary btn-sm" onclick="showProductInfo(${product.no})">상세보기</button></td>
+							<td><span id="pro-cat-${product.no }">${product.category.name }</span></td>
+							<td><span id="pro-name-${product.no }">${product.name }</span></td>
+							<td><span id="pro-company-${product.no }">${product.company.no }</span></td>
+							<td><span id="pro-price-${product.no }"><fmt:formatNumber value="${product.price }"/></span> 원</td>
+							<td>
+								<button class="btn btn-outline-primary btn-sm" onclick="showProductInfo(${product.no})">상세보기</button>
+								<button class="btn btn-outline-primary btn-sm mt-2" onclick="showProductForm(${product.no})">수정하기</button>
+							</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -118,11 +120,95 @@
 		</div>
 	</div>
 </div>
+
+<!-- 상품정보 수정 모달창 -->
+<div class="modal" id="modal-product-form">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">상품정보 수정폼</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+			</div>
+			<div class="modal-body">
+				<form class="border bg-light p-3">
+					<sec:csrfInput/>
+					<input type="hidden" name="no" />
+					<div class="row mb-3">
+						<div class="col-6">
+							<div class="form-group">
+								<label class="form-label">상위 카테고리</label> 
+								<select	class="form-select" name="parentCategoryNo"	onchange="changeCategory()">
+									<c:forEach var="cat" items="${productCategories }">
+										<option value="${cat.no}">${cat.name }</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label class="form-label">하위 카테고리</label> 
+								<select	class="form-select" name="categoryNo">
+
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-6">
+							<div class="form-group">
+								<label class="form-label">상품명</label> 
+								<input type="text" class="form-control" name="name" />
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label class="form-label">제조사</label> 
+								<select	class="form-select" name="companyNo">
+									<c:forEach var="company" items="${companies }">
+										<option value="${company.no}">${company.name }</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-6">
+							<div class="form-group">
+								<label class="form-label">가격</label> 
+								<input type="text" class="form-control" name="price" />
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label class="form-label">수량</label> 
+								<input type="text"	class="form-control" name="stock" />
+							</div>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="form-group">
+							<label class="form-label">가격</label>
+							<textarea class="form-control" rows="3" name="description"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary"	data-bs-dismiss="modal">닫기</button>
+				<button type="button" class="btn btn-primary" onclick="submitForm()">수정</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript">
 	// 부트스트랩 모달(팝업창) 객체를 생성한다.
-	const myModal = new bootstrap.Modal(document.getElementById('modal-product-info'));
+	// const 키워드는 해당 변수가 상수임을 나타낸다.
+	const productdetailsModal = new bootstrap.Modal(document.getElementById("modal-product-info"));
+	const productModifyModal = new bootstrap.Modal("#modal-product-form"); // =const productModifyModal = new bootstrap.Modal(document.getElementById("modal-product-form"));
 	
-	function showProductInfo(no) {
+	// 상세보기
+	function showProductInfo(productNo) {
 		
 		let xhr = new XMLHttpRequest();							// 1. 서버와 HTTP 통신을 하는 XMLHttpRequest 객체를 생성한다.
 		xhr.onreadystatechange = function() {					// 2. xhr객체의 readyState값이 변경될 때 마다 실행되는 이벤트핸들러 함수를 등록한다.
@@ -142,12 +228,103 @@
 				document.getElementById("product-category").textContent = product.category.name;
 				document.getElementById("product-created-date").textContent = product.createdDate;
 				
-				myModal.show();
+				productdetailsModal.show();
 			}
 		}
 		
-		xhr.open("GET", "/admin/products/" + no);				// 3. xhr객체를 초기화한다. 요청방식, 요청URL을 지정한다.
+		xhr.open("GET", "/admin/products/" + productNo);		// 3. xhr객체를 초기화한다. 요청방식, 요청URL을 지정한다.
 		xhr.send(null);											// 4. 서버로 요청을 보낸다.
+	}
+	
+	// 수정하기
+	function showProductForm(productNo){
+		setFormValue(productNo);
+		
+		productModifyModal.show();
+	}
+	
+	async function setFormValue(productNo){
+		let response = await fetch("/admin/products/" + productNo)
+		let product = await response.json();
+		
+		setCategory(product.category.parentNo, product.category.no);		
+		
+		document.querySelector("input[name=no]").value = product.no;
+		document.querySelector("input[name=name]").value = product.name;
+		document.querySelector("select[name=companyNo]").value = product.company.no;
+		document.querySelector("input[name=price]").value = product.price;
+		document.querySelector("input[name=stock]").value = product.stock;
+		document.querySelector("textarea[name=description]").value = product.description;
+	}
+	
+	async function setCategory(parentNo, no){
+		document.querySelector("select[name=parentCategoryNo]").value = parentNo;
+		
+		let response = await fetch("/admin/category?catNo=" + parentNo)
+		let subCategories = await response.json();
+		
+		let options = "";
+		for(let index = 0; index < subCategories.length; index++) {
+			let subCategory = subCategories[index];
+			options += `<option value='\${subCategory.no}' \${subCategory.no == no ? 'selected': ''}> \${subCategory.name}</option>`
+		}
+		document.querySelector("select[name=categoryNo]").innerHTML = options;
+	}
+	
+	function changeCategory(){
+		let parentNo = document.querySelector("select[name=parentCategoryNo]").value;
+		
+		setCategory(parentNo);
+	}
+	
+	async function submitForm(){
+		// 자바스크립트 객체
+		let data = {
+						no : document.querySelector("input[name=no]").value,
+						category: {
+									no:document.querySelector("select[name=categoryNo]").value
+						},
+						name: document.querySelector("input[name=name]").value,
+						company: {
+									no: document.querySelector("select[name=companyNo]").value
+						}, 
+						price: document.querySelector("input[name=price]").value, 
+						stock: document.querySelector("input[name=stock]").value, 
+						description: document.querySelector("textarea[name=description]").value 
+					};
+		
+		let jsonText = JSON.stringify(data);
+		
+		let response = await fetch("/admin/product/modify", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"X-CSRF-TOKEN": document.querySelector("input[name='_csrf']").value
+			},
+			body: jsonText
+		})
+		// 팝업창 닫고, 상품 목록 최신화하기
+		if(response.ok){
+			
+			document.getElementById("pro-name-" + data.no).textContent = data.name;
+			document.getElementById("pro-price-" + data.no).textContent = parseInt(data.price).toLocaleString();
+			
+			// select 박스 엘리먼트를 선택한다.
+			let categorySelect = document.querySelector("select[name=categoryNo]");
+			
+			// select.options는 셀렉터박스의 모든 옵션을 배열로 반환한다.
+			// select.selectedIndex는 셀렉터박스의 옵션 중에서 현재 선택된 옵션의 index를 반환한다.
+			// select.options[select.selectIndex]는 실렉트 박스의 옵션 중에서 현재 선택된 옵션 엘리먼트를 반환한다.
+			// select.options[select.selectIndex].textContent는 현재 선택된 옵션 엘리먼트의 텍스트 컨텐츠를 반환한다.
+			let categoryName = categorySelect.options[categorySelect.selectedIndex].textContent;
+			document.getElementById("pro-cat-" + data.no).textContent = categoryName;
+			
+			let companySelect = document.querySelector("select[name=companyNo]");
+			let companyName = companySelect.options[companySelect.selectedIndex].textContent;
+			document.getElementById("pro-company-" + data.no).textContent = companyName;
+			
+			productModifyModal.hide();
+		}
 		
 	}
 </script>

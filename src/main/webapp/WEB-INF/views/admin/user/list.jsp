@@ -109,10 +109,10 @@
 </div>
 <script type="text/javascript">
 	// 부트스트랩 모달(팝업창) 객체를 생성한다. 방식 2가지
-	
 	const myModal = new bootstrap.Modal(document.getElementById('modal-user-info'));
 	
-	// async - 비동기 통신을 수행하는 함수
+	// 방법1 (방법2보다 간단)
+	// async - 비동기 통신을 수행하는 함수 (await가 사용된 곳에는 async를 사용해야 함)
 	// await - 해당 함수가 처리를 완료할 때까지 기다린다.
 	async function showUserInfo(id){
 		let response = await fetch("/admin/users/" + id);
@@ -130,8 +130,8 @@
 		myModal.show();
 	}
 
-	
-	// 
+
+	// 방법2
 	/* 
 	function showUserInfo(id) {
 		

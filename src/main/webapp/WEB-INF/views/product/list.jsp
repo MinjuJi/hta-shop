@@ -24,11 +24,11 @@
 		<div class="col-9">
 			<table class="table">
 				<colgroup>
-					<col width="10">
-					<col width="45">
-					<col width="15">
-					<col width="15">
-					<col width="15">
+					<col width="10%">
+					<col width="45%">
+					<col width="15%">
+					<col width="15%">
+					<col width="15%">
 				</colgroup>
 				<thead>
 					<tr>
